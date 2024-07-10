@@ -6,14 +6,14 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       //console.log(context);
-      console.log(context.user);
+
       if (context.user) {
         data = await User.findOne({ _id: context.user._id }); //.select(
         //"-__v -password"
         //);
         return data;
       }
-      //throw new AuthenticationError("You need to be logged in!");
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
   Mutation: {
@@ -38,9 +38,28 @@ const resolvers = {
       }
 
       const token = signToken(user);
-      console.log(context.user);
 
       return { token, user };
+    },
+    saveBook: async (parent, { addBook }, context) => {
+      if (context.user) {
+        const addBook = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $push: { savedBooks: addBook } },
+          { new: true }
+        );
+      }
+    },
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        const deleteBook = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true }
+        );
+        return deleteBook;
+      }
+      throw new AuthenticationError("You need to be loggin!");
     },
   },
 };
