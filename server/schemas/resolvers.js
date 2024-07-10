@@ -45,10 +45,11 @@ const resolvers = {
       if (context.user) {
         const addBook = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { savedBooks: addBook } },
+          { $addToSet: { savedBooks: addBook } },
           { new: true }
         );
       }
+      return addBook;
     },
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
