@@ -1,4 +1,5 @@
-//const { gql } = require("apollo-server-express");
+//define the entities and the mutations the input type allows the data
+//grouped for InputBook to be passed as a parameter to save a book
 const typeDefs = `
   type User {
     _id: ID
