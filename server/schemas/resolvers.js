@@ -42,11 +42,11 @@ const resolvers = {
       return { token, user };
     },
     //check if the user is logged in and add/remove a book from the list
-    saveBook: async (parent, { addBook }, context) => {
+    saveBook: async (parent, { inputBook }, context) => {
       if (context.user) {
         const addBook = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: addBook } },
+          { $addToSet: { savedBooks: inputBook } },
           { new: true }
         );
         return addBook;
