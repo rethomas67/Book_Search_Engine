@@ -1,6 +1,6 @@
 # dependencies
-node_modules/
-node/
+node_modules
+
 # git rm -r --cached node_modules
 /.pnp
 .pnp.js
