@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 
 import Auth from "../utils/auth";
-//import { saveBook, searchGoogleBooks } from '../utils/API';
+
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import { useMutation } from "@apollo/client";
 import { SAVE_BOOK } from "../utils/mutation";
@@ -29,7 +29,7 @@ const SearchBooks = () => {
     if (!searchInput) {
       return false;
     }
-
+    //run the google book search
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${searchInput}`
@@ -39,8 +39,10 @@ const SearchBooks = () => {
         throw new Error("something went wrong!");
       }
 
+      //get the books response
       const { items } = await response.json();
 
+      //add the books to an array
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
@@ -48,13 +50,14 @@ const SearchBooks = () => {
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || "",
       }));
-
+      //add the books to the usestate hook
       setSearchedBooks(bookData);
       setSearchInput("");
     } catch (err) {
       console.error(err);
     }
   };
+  //setup the usemutation hook for saving a book
   const [saveBook] = useMutation(SAVE_BOOK);
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
@@ -69,19 +72,13 @@ const SearchBooks = () => {
     }
 
     try {
-      //const response = await saveBook(bookToSave, token);
-      console.log(bookToSave);
+      //run the saveBook mutation
       const { data } = await saveBook({
         variables: { inputBook: { ...bookToSave } },
       });
-      alert(data);
-
-      //if (!response.ok) {
-      //  throw new Error('something went wrong!');
-      //}
 
       // if book successfully saves to user's account, save book id to state
-      alert(savedBookIds);
+
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.log(err);

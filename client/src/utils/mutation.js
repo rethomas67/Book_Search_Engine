@@ -2,7 +2,7 @@
 import { gql } from "@apollo/client";
 
 //CRUD METHODS TO LOGIN ADD USERS ADD BOOKS OR REMOVE BOOKS
-
+//use gql to run the mutations as a document for graphql
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {

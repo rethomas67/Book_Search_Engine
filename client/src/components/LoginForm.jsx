@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Form, Button, Alert } from "react-bootstrap";
 
-//import { loginUser } from "../utils/API";
 import { LOGIN_USER } from "../utils/mutation";
 import Auth from "../utils/auth";
 
@@ -28,18 +27,12 @@ const LoginForm = () => {
       event.stopPropagation();
     }
 
+    //call the login mutation with the email and password from userformData
     try {
       const { data } = await login({
         variables: { ...userFormData },
       });
-
-      /*if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
-
-      const { token, user } = await response.json();
-
-      console.log(user);*/
+      //get the autorization token
       Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
